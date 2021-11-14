@@ -4,7 +4,7 @@
 set -e
 
 usage() {
-    echo This script will crop any video into 9:16 ratio
+    echo This script will crop any video into 9:16 ratio for youtube shorts
     echo shorts.bash -i input.mp4
     echo options:
     echo --fit

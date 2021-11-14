@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# First version of ./shorts.bash script
+
 date1 () {
     echo $(date +%Y%m%d%H%M%S)
 }

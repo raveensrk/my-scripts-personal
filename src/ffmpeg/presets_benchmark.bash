@@ -5,7 +5,8 @@ set -e
 
 usage () { 
     echo "This benchmark is done for mp4 encoding..."
-    echo "./presets_benchmark -i input.ext" 
+    echo "./presets_benchmark -i input.ext"
+	echo "This script will give the stats of which preset is faster" 
 }
 
 while [ "$1" != "" ]; do

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Convert videos to 60 fps in webm format vp8
+
 set -x
 set -e
 

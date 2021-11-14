@@ -4,7 +4,7 @@ set -x
 set -e
 
 help () {
-    echo "Help section here..."
+    echo "This script converts 21:9 video to 16:9 with proper padding"
 }
 
 while [ "$1" ]; do
