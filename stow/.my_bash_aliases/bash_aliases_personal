@@ -1,0 +1,7 @@
+# Personal bash aliases
+
+# Find music
+
+,fmusic () {
+        find "/mnt/HDD-1TB/Music Collections/" | fzf
+}    

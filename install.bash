@@ -1,13 +1,19 @@
 #!/bin/bash
 
-script_path=$(realpath "$0")
+set -e
+
 script_dir=$(dirname "$0")
 
-pushd script_dir
+my_bash_aliases_link () {
+    local name=$(basename "$1")
+    local dest_link_path="$HOME/.my_bash_aliases/$name"
+    [ -L "$dest_link_path" ] && rm "$dest_link_path"
+    ln -s $(realpath "$1") "$dest_link_path"
+}
 
-path=$(realpath "src")
+pushd $script_dir
 
-echo "export PATH=\"$path:$PATH\"" >> ~/.bashrc
+my_bash_aliases_link "./src/bash_aliases_personal"
 
 popd
 
