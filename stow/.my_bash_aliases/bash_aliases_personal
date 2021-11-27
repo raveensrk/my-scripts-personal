@@ -4,4 +4,6 @@
 
 ,fmusic () {
         find "/mnt/HDD-1TB/Music Collections/" | fzf
-}    
+}
+
+export PATH="~/.local/scripts/my-scripts-personal:$PATH"
