@@ -13,7 +13,7 @@ my_bash_aliases_link () {
 
 pushd $script_dir
 
-my_bash_aliases_link "./src/bash_aliases_personal"
+stow stow
 
 popd
 

@@ -3,7 +3,8 @@
 # Find music
 
 ,fmusic () {
-        find "/mnt/HDD-1TB/Music Collections/" | fzf
+        find "/mnt/d/Music Collections/" | fzf
 }
 
 export PATH="~/.local/scripts/my-scripts-personal:$PATH"
+alias ,n="newsboat"
