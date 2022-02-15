@@ -9,3 +9,4 @@
 export PATH="~/.local/scripts/my-scripts-personal:$PATH"
 export PATH="~/.local/scripts/my-scripts-personal/ffmpeg:$PATH"
 alias ,n="newsboat"
+alias ,y="youtube-dl"
