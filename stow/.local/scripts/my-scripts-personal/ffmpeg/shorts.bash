@@ -66,6 +66,9 @@ elif ((crop == 1)); then
     ffmpeg $trim -i "$input" -vf "crop=ih*9/16:ih" $preset $out
 fi
 
-mpv="mpv.exe"
-[ command -v "mpv.exe" ] || mpv="mpv"
+if command -v "mpv.exe"; then
+    mpv="mpv.exe"
+else
+    mpv="mpv"
+fi
 $mpv --loop $out
