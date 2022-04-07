@@ -28,28 +28,25 @@ done
 width=$(mediainfo "$in" --Inform="Video;%Width%")
 height=$(mediainfo "$in" --Inform="Video;%Height%")
 name=$(basename "$in")
-out=out-$name
+out="out-$name.mp4"
+
+[ -d converted_21x9_to_16x9 ] || mkdir converted_21x9_to_16x9
+pushd converted_21x9_to_16x9
 
 if [ $width != 1920 ]; then
     echo "This file \“${i}\“ is not of width 1920, converting..."
     echo "WidthxHeight = ${width}x${height}"
+    ffmpeg -i "$in" -vf "scale=w=1920:h=-2,pad=width=1920:height=1080:x=0:y=(oh-ih/2)"  -preset veryfast -r 30 $out
 else
     echo "No need to convert this file is already 1920 in width..."
     echo "WidthxHeight = ${width}x${height}"
-    exit 0
+    ffmpeg -i "$in" -preset veryfast -r 30 $out
 fi
 
-[ -d converted_21x9_to_16x9 ] || mkdir converted_21x9_to_16x9
-pushd converted_21x9_to_16x9
-ffmpeg -i "$in" -vf "scale=w=1920:h=-2,pad=width=1920:height=1080:x=0:y=(oh-ih/2)"  -preset veryfast $out
 out_width=$(mediainfo "$out" --Inform="Video;%Width%")
 out_height=$(mediainfo "$out" --Inform="Video;%Height%")
 echo "WidthxHeight = ${out_width}x${out_height}"
 # mpv $out
 popd
 
-
-
-
-
-
+exit 0

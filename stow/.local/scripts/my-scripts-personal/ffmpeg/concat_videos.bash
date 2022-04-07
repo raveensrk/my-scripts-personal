@@ -11,9 +11,9 @@ cat .concat.txt
 
 read -p "Continue press enter or exit with Ctrl-c"
 
-# preset="-codec copy"
+preset="-codec copy"
 # preset="-vf scale=1920:-2 -preset veryfast"
-preset="-vf fps=30 -preset veryfast"
+# preset="-vf fps=30 -preset veryfast"
 
 ffmpeg -f concat -safe 0 -i .concat.txt $preset concat.mp4
 
