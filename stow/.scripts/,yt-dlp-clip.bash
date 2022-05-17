@@ -33,18 +33,18 @@ file_name=$(yt-dlp --no-playlist -f "bv+ba/b" "$url" --get-filename --restrict-f
 yt-dlp --no-playlist -f "bv+ba/b" "$url" --restrict-filenames --merge-output-format mp4 -o %\(title\)s_%\(id\)s.%\(ext\)s
 
 if [ "$ss" = "" ] && [ "$to" = "" ]; then
-    
+    out="${file_name}"
 else
-clip_time=$(echo "clip_ss_${ss}_to_${to}" | tr ":" "-")
-echo $clip_time
-out="${clip_time}_${file_name}"
-echo $out
-ss="-ss $ss"
-to="-to $to"
+    clip_time=$(echo "clip_ss_${ss}_to_${to}" | tr ":" "-")
+    echo $clip_time
+    out="${clip_time}_${file_name}"
+    echo $out
+    ss="-ss $ss"
+    to="-to $to"
+    ffmpeg $ss $to -i "$file_name" -preset veryfast "$out"
 fi
 
 
-ffmpeg $ss $to -i "$file_name" -preset veryfast "$out"
 
-open "$out"
+mpv "$out"
 
