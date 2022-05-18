@@ -30,7 +30,9 @@ done
 
 # yt-dlp -f "bv+ba/b" "$url" --get-filename --restrict-filenames --merge-output-format mp4 -o %(title)s_%(id)s.%(ext)s --ppa "ffmpeg_i1:$ss $to"
 file_name=$(yt-dlp --no-playlist -f "bv+ba/b" "$url" --get-filename --restrict-filenames --merge-output-format mp4 -o %\(title\)s_%\(id\)s.%\(ext\)s)
-yt-dlp --no-playlist -f "bv+ba/b" "$url" --restrict-filenames --merge-output-format mp4 -o %\(title\)s_%\(id\)s.%\(ext\)s
+
+
+yt-dlp --write-subs --write-auto-subs --no-playlist -f "bv+ba/b" "$url" --restrict-filenames --merge-output-format mp4 -o %\(title\)s_%\(id\)s.%\(ext\)s
 
 if [ "$ss" = "" ] && [ "$to" = "" ]; then
     out="${file_name}"
