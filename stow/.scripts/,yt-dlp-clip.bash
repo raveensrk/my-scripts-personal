@@ -14,6 +14,9 @@ while [ "$1" ]; do
             shift
             to="$1"
             ;;
+        --mp3)
+            mp3="1"
+            ;;
         --help|-h)
             help
             exit 0
@@ -35,7 +38,15 @@ file_name=$(yt-dlp --no-playlist -f "bv+ba/b" "$url" --get-filename --restrict-f
 yt-dlp --write-subs --write-auto-subs --no-playlist -f "bv+ba/b" "$url" --restrict-filenames --merge-output-format mp4 -o %\(title\)s_%\(id\)s.%\(ext\)s
 
 if [ "$ss" = "" ] && [ "$to" = "" ]; then
-    out="${file_name}"
+    orig_file_name="orig_${file_name}"
+    mv "${file_name}" "$orig_file_name"
+    out="${file_name}.mp4"
+    ffmpeg -i "$orig_file_name" -preset veryfast "$out"
+    if [ "$mp3" = "1" ]; then
+        out2="${file_name}.mp3"
+        ffmpeg -i "$orig_file_name" -preset veryfast "$out2"
+    fi
+    rm "${orig_file_name}"
 else
     clip_time=$(echo "clip_ss_${ss}_to_${to}" | tr ":" "-")
     echo $clip_time
@@ -49,4 +60,7 @@ fi
 
 
 mpv "$out"
+if [ "$mp3" = "1" ]; then
+    mpv "$out2"
+fi
 
