@@ -17,6 +17,9 @@ while [ "$1" ]; do
         --mp3)
             mp3="1"
             ;;
+        --mp3-only)
+            mp3_only="1"
+            ;;
         --help|-h)
             help
             exit 0
@@ -40,12 +43,17 @@ yt-dlp --write-subs --write-auto-subs --no-playlist -f "bv+ba/b" "$url" --restri
 if [ "$ss" = "" ] && [ "$to" = "" ]; then
     orig_file_name="orig_${file_name}"
     mv "${file_name}" "$orig_file_name"
-    out="${file_name}.mp4"
-    ffmpeg -i "$orig_file_name" -preset veryfast "$out"
-    if [ "$mp3" = "1" ]; then
+
+    if [ ! "$mp3_only" = "1" ]; then
+        out="${file_name}.mp4"
+        ffmpeg -i "$orig_file_name" -preset veryfast "$out"
+    fi
+
+    if [ "$mp3" = "1" ] || [ "$mp3_only" = "1" ]; then
         out2="${file_name}.mp3"
         ffmpeg -i "$orig_file_name" -preset veryfast "$out2"
     fi
+
     rm "${orig_file_name}"
 else
     clip_time=$(echo "clip_ss_${ss}_to_${to}" | tr ":" "-")
@@ -58,9 +66,11 @@ else
 fi
 
 
+if [ ! "$mp3_only" = "1" ]; then
+    mpv "$out"
+fi
 
-mpv "$out"
-if [ "$mp3" = "1" ]; then
+if [ "$mp3" = "1" ] || [ "$mp3_only" = "1" ]; then
     mpv "$out2"
 fi
 
