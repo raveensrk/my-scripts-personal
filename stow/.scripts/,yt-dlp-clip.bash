@@ -20,6 +20,10 @@ while [ "$1" ]; do
         --mp3-only)
             mp3_only="1"
             ;;
+        --scale-width)
+            shift
+            scale="-vf scale=$1:-2"
+            ;;
         --help|-h)
             help
             exit 0
@@ -43,6 +47,13 @@ yt-dlp --write-subs --write-auto-subs --no-playlist -f "bv+ba/b" "$url" --restri
 if [ "$ss" = "" ] && [ "$to" = "" ]; then
     orig_file_name="orig_${file_name}"
     mv "${file_name}" "$orig_file_name"
+
+    if [ "$scale" != "" ]; then
+        tmp="tmp.mp4"
+        mv "$orig_file_name" "$tmp" 
+        ffmpeg -i "$tmp" -preset veryfast $scale "$orig_file_name"
+        rm "$tmp"
+    fi
 
     if [ ! "$mp3_only" = "1" ]; then
         out="${file_name}.mp4"
