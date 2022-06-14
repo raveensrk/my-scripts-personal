@@ -1,0 +1,3 @@
+[submodule "stow/.scripts/ffmpeg/FFMPEG-gif-script-for-bash"]
+	path = stow/.scripts/ffmpeg/FFMPEG-gif-script-for-bash
+	url = git@github.com:thevangelist/FFMPEG-gif-script-for-bash.git
