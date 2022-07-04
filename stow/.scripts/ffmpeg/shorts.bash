@@ -63,7 +63,7 @@ if ((fit == 1)); then
 elif ((crop == 1)); then
     # ffmpeg $trim -i "$input" -vf "scale=-2:1080,crop=608:1080" output.mp4
     # w/h = 9/16; w = 9*h/16
-    ffmpeg $trim -i "$input" -vf "crop=ih*9/16:ih" $preset $out
+    ffmpeg $trim -i "$input" -vf "crop=ih*9/16:ih:500:0" $preset $out
 fi
 
 if command -v "mpv.exe"; then

@@ -3,9 +3,7 @@
 # https://trac.ffmpeg.org/wiki/HowToBurnSubtitlesIntoVideo
 
 help () {
-
     echo "Look inside the file."
-
 }
 
 
@@ -13,21 +11,42 @@ while [ "$1" ]; do
     case "$1" in
         --help|-h)
             help
+            exit 0
+            ;;
+        --input|-i)
+            shift
+            input_file="$1"
+            ;;
+        --subtitle|-s)
+            shift
+            subtitle_file="$1"
+            ;;
+        --ss)
+            shift
+            ss="-ss $1"
+            ;;
+        --to)
+            shift
+            to="-to $1"
+            ;;
+        --output|-o)
+            shift
+            output="$1"
             ;;
         *)
             echo "Wrong Argument...!"
             help
             exit 2
-            
+            ;;
     esac
     shift
 done
 
-ffmpeg -ss 07:00 -to 07:20 -copyts \
+ffmpeg $ss $to -copyts \
        -i "$input_file" \
-       -ss 07:00 -to 07:20 \
-       -vf subtitles="$subtitles_file" \
-       -preset veryfast \
-       "$out" \
+       $ss $to \
+       -vf subtitles="$subtitle_file" \
+       -preset veryslow \
+       "$output" \
     && \
-    open the_boys_s0304_printing_money.mp4
+    open "$output"
