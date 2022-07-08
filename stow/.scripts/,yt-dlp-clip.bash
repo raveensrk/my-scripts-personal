@@ -59,10 +59,10 @@ if [ "$scale" != "" ]; then
     rm "$tmp"
 fi
 
-if [ ! "$mp3_only" = "1" ]; then
-    out="${file_name}.mp4"
-    ffmpeg -i "$orig_file_name" -preset veryfast "$out"
-fi
+# if [ ! "$mp3_only" = "1" ]; then
+#     out="${file_name}.mp4"
+#     ffmpeg -i "$orig_file_name" -preset veryfast "$out"
+# fi
 
 if [ "$mp3" = "1" ] || [ "$mp3_only" = "1" ]; then
     out2="${file_name}.mp3"
@@ -70,7 +70,7 @@ if [ "$mp3" = "1" ] || [ "$mp3_only" = "1" ]; then
 fi
 
 if [ ! "$ss" = "" ] && [ ! "$to" = "" ]; then
-    clip_time=$(echo "clip_ss_${ss}_to_${to}" | tr ":" "-")
+    clip_time=$(echo "clip_ss_${ss}_to_${to}" | tr ":" "-" | tr " " "_")
     out="${clip_time}_${orig_file_name}"
     ffmpeg $ss $to -i "$orig_file_name" -preset veryfast "$out"
 fi

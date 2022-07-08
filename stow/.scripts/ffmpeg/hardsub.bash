@@ -4,6 +4,7 @@
 
 help () {
     echo "Look inside the file."
+    less $0
 }
 
 

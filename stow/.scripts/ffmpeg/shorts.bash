@@ -3,6 +3,8 @@
 # set -x
 set -e
 
+source ~/.bash_prompt 
+
 usage() {
     echo This script will crop any video into 9:16 ratio for youtube shorts
     echo shorts.bash -i input.mp4
@@ -32,6 +34,14 @@ while [ "$1" ]; do
             shift
             trim="$1"
             ;;
+        --x-offest|-x)
+            shift
+            xoffset="$1"
+            ;;
+        --subtitle|-s)
+            shift
+            subtitle="$1"
+            ;;
         *)
             echo wrong option...
             exit 2
@@ -55,20 +65,21 @@ if [[ ($crop == 0) && ($fit == 0) ]]; then
     crop=1
 fi
 
-preset="-preset veryfast"
+preset="-preset veryslow"
 out="shorts-output.mp4"
 
 if ((fit == 1)); then
     ffmpeg $trim -i "$input" -vf "scale=w=iw:h=iw*16/9:force_original_aspect_ratio=decrease,pad=iw:iw*16/9:(ow-iw)/2:(oh-ih)/2" $preset $out
 elif ((crop == 1)); then
-    # ffmpeg $trim -i "$input" -vf "scale=-2:1080,crop=608:1080" output.mp4
-    # w/h = 9/16; w = 9*h/16
-    ffmpeg $trim -i "$input" -vf "crop=ih*9/16:ih:500:0" $preset $out
+    set -x
+    ffmpeg $trim -copyts -i "$input" $trim -filter_complex "[0:v]crop=ih*9/16:ih:$xoffset:0[v1];[v1]subtitles=$subtitle[v2];[0:a]amerge=inputs=1[a]" -map [v2] -map [a] $preset $out
+    set +x
 fi
 
-if command -v "mpv.exe"; then
-    mpv="mpv.exe"
-else
-    mpv="mpv"
-fi
+yellow
+echo Output file:
+realpath $out
+nc
+
+mpv=${mpv:-mpv}
 $mpv --loop $out
