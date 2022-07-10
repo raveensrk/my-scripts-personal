@@ -1,5 +1,9 @@
 #!/bin/bash
 
+help () {
+    less $0
+}
+
 while [ "$1" ]; do
     case "$1" in
         --url)
