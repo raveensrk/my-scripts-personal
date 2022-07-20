@@ -79,7 +79,7 @@ if [ ! "$ss" = "" ] && [ ! "$to" = "" ]; then
     ffmpeg $ss $to -i "$orig_file_name" -preset veryfast "$out"
 fi
 
-rm "${orig_file_name}"
+out=${out:-$orig_file_name}
 
 if [ ! "$mp3_only" = "1" ]; then
     mpv "$out"

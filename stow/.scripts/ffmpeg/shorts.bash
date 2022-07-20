@@ -36,7 +36,7 @@ while [ "$1" ]; do
             ;;
         --x-offest|-x)
             shift
-            xoffset="$1"
+            xoffset=":$1:0"
             ;;
         --subtitle|-s)
             shift
@@ -72,7 +72,11 @@ if ((fit == 1)); then
     ffmpeg $trim -i "$input" -vf "scale=w=iw:h=iw*16/9:force_original_aspect_ratio=decrease,pad=iw:iw*16/9:(ow-iw)/2:(oh-ih)/2" $preset $out
 elif ((crop == 1)); then
     set -x
-    ffmpeg $trim -copyts -i "$input" $trim -filter_complex "[0:v]crop=ih*9/16:ih:$xoffset:0[v1];[v1]subtitles=$subtitle[v2];[0:a]amerge=inputs=1[a]" -map [v2] -map [a] $preset $out
+    if [ "$subtitle" != "" ]; then
+        ffmpeg $trim -copyts -i "$input" $trim -filter_complex "[0:v]crop=ih*9/16:ih$xoffset[v1];[v1]subtitles=$subtitle[v2];[0:a]amerge=inputs=1[a]" -map [v2] -map [a] $preset $out
+    else
+        ffmpeg $trim -i "$input" -vf "crop=ih*9/16:ih$xoffset" $preset $out
+    fi
     set +x
 fi
 
