@@ -35,7 +35,7 @@ usage() {
 }
 
 crop="1080"
-preset="-preset veryfast"
+preset="-preset ultrafast"
 
 while [ "$1" ]; do
     case "$1" in
@@ -211,8 +211,8 @@ fi
 
 ffmpeg -stream_loop -1 -i "$in0" -stream_loop -1 -i "$in1" \
 -filter_complex \
-"[0:v] scale=$scale,crop='min($crop,iw)':ih [left]; \
-    [1:v] scale=$scale,crop='min($crop,iw)':ih [right]; \
+"[0:v] scale=$scale,crop='min($crop,iw)':ih:270:0 [left]; \
+    [1:v] scale=$scale,crop='min($crop,iw)':ih:270:0 [right]; \
 [left][right] $stack=inputs=2 [left+right] $amerge" -map [left+right] $amap -t "$out_dur" $preset -r 60 out.mp4
 
 ffmpeg -i out.mp4 -q:v 1 -vframes 1 $preset out.jpg
