@@ -23,6 +23,12 @@ while [ "$1" ]; do
             shift
             in="$1"
             ;;
+        --center-fit|-cf)
+            cf="yes"
+            ;;
+        --debug|-d)
+            set -x
+            ;;
         --x-offest|-x)
             shift
             x="${1}"
@@ -45,15 +51,25 @@ done
 
 x=${x:-0}
 y=${y:-0}
+cf=${cf:-no}
 echo x-offset = $x
 echo y-offset = $y
 echo input image = $(realpath "$in")
 
-tmp="tmp.jpg"
-convert "$in" -resize x3508 "$tmp"
 out="resized_to_a3_$in"
-convert "$tmp" -gravity center -crop 4961x+$x+$y "$out"
-rm "$tmp"
+
+if [ "$cf" = "yes" ]; then
+    magick "$in" -resize 4961x3508 -background black \
+           -compose Copy \
+           -gravity center \
+           -extent 4961x3508  \
+           "$out"
+else
+    tmp="resized_tmp.jpg"
+    convert "$in" -resize x3508 "$tmp"
+    convert "$tmp" -gravity center -crop 4961x+$x+$y "$out"
+    rm "$tmp"
+fi
 
 echo "Done conversion. Output saved at:
 $(realpath "$out")
