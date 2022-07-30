@@ -34,7 +34,7 @@ usage() {
     "
 }
 
-crop="1080"
+crop=",crop='min(1080,iw)':ih:iw/4:0"
 preset="-preset ultrafast"
 
 while [ "$1" ]; do
@@ -44,7 +44,7 @@ while [ "$1" ]; do
             echo "Showing usage!"
             usage
             exit 0
-        ;;
+            ;;
         -i)
             shift
             file=$(realpath "$1")
@@ -56,38 +56,38 @@ while [ "$1" ]; do
             fi
             input+=("$(realpath "$1")")
             shift
-        ;;
+            ;;
         -I)
             shift
             opts+=("$1")
             shift
-        ;;
+            ;;
         -f)
             shift
             filter+=("$1")
             shift
-        ;;
+            ;;
         -c)
             shift
             echo "$1"
             crop="$1"
             shift
-        ;;
+            ;;
         -s)
             shift
             short="short"
-        ;;
+            ;;
         -v)
             shift
             stack="vstack"
-        ;;
+            ;;
         *)
             shift
             echo "Invalid option: \"$1\""
             echo "Check usage..."
             usage
             exit 2
-        ;;
+            ;;
     esac
 done
 
@@ -111,12 +111,12 @@ case $in0_ext in
         echo 'Converting in0 gif to mp4...'
         ffmpeg -i "$in0" -vf scale=-2:1080 $preset in0.mp4
         in0="in0.mp4"
-    ;;
+        ;;
     png | jpg | jpeg)
         echo 'Converting in0 image to mp4...'
         ffmpeg -framerate 1 -i "$in0" -vf scale=-2:1080 $preset in0.mp4
         in0="in0.mp4"
-    ;;
+        ;;
 esac
 
 case $in1_ext in
@@ -124,12 +124,12 @@ case $in1_ext in
         echo 'Converting in1 gif to mp4...'
         ffmpeg -i "$in1" -vf scale=-2:1080 $preset in1.mp4
         in1="in1.mp4"
-    ;;
+        ;;
     png | jpg | jpeg)
         echo 'Converting in1 image to mp4...'
         ffmpeg -framerate 1 -i "$in1" -vf scale=-2:1080 $preset in1.mp4
         in1="in1.mp4"
-    ;;
+        ;;
 esac
 
 in0_ext="${in0##*\.}"
@@ -210,9 +210,9 @@ else
 fi
 
 ffmpeg -stream_loop -1 -i "$in0" -stream_loop -1 -i "$in1" \
--filter_complex \
-"[0:v] scale=$scale,crop='min($crop,iw)':ih:270:0 [left]; \
-    [1:v] scale=$scale,crop='min($crop,iw)':ih:270:0 [right]; \
+       -filter_complex \
+       "[0:v] scale=$scale$crop [left]; \
+        [1:v] scale=$scale$crop [right]; \
 [left][right] $stack=inputs=2 [left+right] $amerge" -map [left+right] $amap -t "$out_dur" $preset -r 60 out.mp4
 
 ffmpeg -i out.mp4 -q:v 1 -vframes 1 $preset out.jpg
